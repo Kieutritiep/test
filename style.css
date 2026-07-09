@@ -1,14 +1,32 @@
 body {
   font-family: 'Lora', serif;
-  background: #ffffff;
+  background-color: #f7ebe9;
   color: #111;
   line-height: 1.8;
-  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
 }
 
 html, body {
   overflow-x: hidden;
   touch-action: pan-y;
+}
+
+#card {
+  width: 100%;
+  max-width: 450px;
+  background-color: #ffffff;
+  box-shadow: 0 0 35px rgba(217, 136, 128, 0.25);
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Titles */
@@ -659,8 +677,969 @@ button:hover { opacity: 0.85; }
 
 /* Float heart */
 @keyframes floatHeart {
-  0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); }
-  25%  { transform: translateY(-10px) translateX(5px)  rotate(-10deg); }
-  50%  { transform: translateY(-20px) translateX(-5px) rotate(10deg);  }
-  75%  { transform: translateY(-10px) translateX(5px)  rotate(-5deg);  }
+  0%   { transform: translateX(0) scale(0.5); opacity: 0; bottom: -60px; }
+  10%  { opacity: 1; }
+  50%  { transform: translateX(calc(var(--drift) * 0.5)) scale(1); }
+  80%  { opacity: 0.7; }
+  100% { transform: translateX(var(--drift)) scale(0.8) rotate(20deg); opacity: 0; bottom: 100vh; }
 }
+
+/* WEDDING EFFECTS - ADDITIONAL STYLES */
+@keyframes swanFloat {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50%      { transform: translateY(-12px) rotate(2deg); }
+}
+@keyframes swanGlow {
+  0%, 100% { filter: drop-shadow(0 0 12px #ff8fabcc) drop-shadow(0 0 30px #ff4d7988); }
+  50%      { filter: drop-shadow(0 0 24px #ff4d79ee) drop-shadow(0 0 60px #ff1a5eaa); }
+}
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+  50%      { opacity: 1; transform: scale(1) rotate(180deg); }
+}
+@keyframes giftBounce {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%      { transform: translateY(-8px) scale(1.08); }
+}
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes panelSlideUp {
+  from { opacity: 0; transform: translateY(60px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+@keyframes particlePop {
+  0%   { transform: translate(0,0) scale(1); opacity: 1; }
+  100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+}
+@keyframes qrSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Gift button floating */
+#weddingGiftBtn {
+  position: fixed;
+  bottom: 28px;
+  right: 22px;
+  z-index: 8888;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff6b9d, #ff1a5e);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 24px rgba(255, 77, 121, 0.4), 0 2px 8px rgba(0, 0, 0, 0.15);
+  animation: giftBounce 2.2s ease-in-out infinite;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+#weddingGiftBtn:hover {
+  box-shadow: 0 10px 36px rgba(255, 77, 121, 0.67);
+  transform: scale(1.05) translateY(-8px);
+}
+#weddingGiftBtn svg { width: 32px; height: 32px; }
+
+/* Overlay */
+#weddingGiftOverlay {
+  display: none;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 450px;
+  height: 100%;
+  bottom: 0;
+  z-index: 9000;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  animation: overlayIn 0.25s ease;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: hidden;
+}
+#weddingGiftOverlay.active { display: flex; }
+
+/* Panel */
+#weddingGiftPanel {
+  width: 100%;
+  max-width: 480px;
+  background: #fff;
+  border-radius: 28px 28px 0 0;
+  padding: 28px 20px 36px;
+  animation: panelSlideUp 0.35s cubic-bezier(.22, 1, .36, 1);
+  position: relative;
+  box-shadow: 0 -8px 40px rgba(255, 77, 121, 0.13);
+}
+
+/* Tab bar */
+.gift-tabs { display: flex; gap: 0; margin-bottom: 20px; border-radius: 14px; overflow: hidden; background: #f3f3f3; padding: 4px; }
+.gift-tab {
+  flex: 1; padding: 10px 0; border: none; background: transparent;
+  font-family: 'Lora', serif;
+  font-size: 15px; font-weight: 600; color: #aaa; cursor: pointer;
+  border-radius: 10px; transition: all 0.22s;
+}
+.gift-tab.active { background: #fff; color: #ff4d79; box-shadow: 0 2px 8px rgba(255, 77, 121, 0.13); }
+
+/* Swan hero */
+.swan-hero {
+  text-align: center;
+  padding: 10px 0 16px;
+}
+.swan-hero svg { animation: swanFloat 3s ease-in-out infinite, swanGlow 3s ease-in-out infinite; }
+
+/* Gift grid */
+.gift-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  max-height: 260px;
+  overflow-y: auto;
+  padding: 4px 2px;
+}
+.gift-item {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 4px; cursor: pointer; padding: 8px 4px;
+  border-radius: 14px; border: 2px solid transparent;
+  transition: all 0.18s; position: relative;
+}
+.gift-item:hover, .gift-item.selected {
+  border-color: #ff4d79;
+  background: #fff0f4;
+  transform: scale(1.06);
+}
+.gift-item .gift-icon { font-size: 32px; line-height: 1; }
+.gift-item .gift-name { font-size: 10px; color: #555; text-align: center; font-weight: 500; }
+.gift-item .gift-price {
+  font-size: 10px; color: #ff4d79; font-weight: 700;
+  display: flex; align-items: center; gap: 2px;
+}
+.gift-item .gift-price::before { content: '🪙'; font-size: 9px; }
+
+/* Name input row */
+.gift-name-row {
+  display: flex; gap: 10px; align-items: center; margin-top: 16px;
+}
+.gift-name-row input {
+  flex: 1; padding: 12px 16px; border: 1.5px solid #eee;
+  border-radius: 50px; font-size: 14px; outline: none;
+  transition: border-color 0.2s;
+  font-family: 'Lora', serif;
+}
+.gift-name-row input:focus { border-color: #ff4d79; }
+.gift-send-btn {
+  padding: 12px 24px; background: linear-gradient(135deg, #ff6b9d, #ff1a5e);
+  color: #fff; border: none; border-radius: 50px; font-size: 15px;
+  font-weight: 700; cursor: pointer; transition: opacity 0.2s;
+  white-space: nowrap;
+  font-family: 'Lora', serif;
+}
+.gift-send-btn:hover { opacity: 0.85; }
+
+/* QR tab */
+.qr-content { text-align: center; padding: 10px 0; }
+.qr-box {
+  display: inline-block; padding: 18px; background: #fff;
+  border-radius: 20px; box-shadow: 0 4px 24px rgba(255, 77, 121, 0.13);
+  border: 3px solid #ff8fab;
+  position: relative;
+  min-height: 220px;
+  min-width: 220px;
+}
+.qr-box img {
+  width: 180px;
+  height: 180px;
+  border-radius: 8px;
+  transition: opacity 0.3s ease;
+  display: block;
+  margin: 0 auto;
+}
+.qr-box img.loading {
+  opacity: 0.3;
+}
+.qr-placeholder {
+  width: 180px;
+  height: 180px;
+  background: #f8f8f8;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: #bbb;
+  flex-direction: column;
+  gap: 8px;
+}
+.qr-placeholder svg { animation: qrSpin 4s linear infinite; }
+.qr-bank-info { margin-top: 16px; font-size: 14px; color: #555; line-height: 1.7; }
+.qr-bank-info strong { color: #ff4d79; }
+
+/* Spinner loader for QR loading state */
+.qr-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 32px;
+  height: 32px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #ff4d79;
+  border-radius: 50%;
+  animation: qrSpin 1s linear infinite;
+  display: none;
+}
+.qr-box.is-loading .qr-spinner {
+  display: block;
+}
+
+/* Close btn */
+.gift-close {
+  position: absolute; top: 14px; right: 18px;
+  background: #f3f3f3; border: none; border-radius: 50%;
+  width: 32px; height: 32px; font-size: 18px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: #aaa; transition: background 0.2s;
+}
+.gift-close:hover { background: #ffd6e0; color: #ff4d79; }
+
+/* Sparkles overlay */
+.sparkle-wrap { position: absolute; inset: 0; pointer-events: none; overflow: hidden; border-radius: 28px 28px 0 0; }
+.sp {
+  position: absolute; width: 6px; height: 6px;
+  background: #ff8fab; border-radius: 50%;
+  animation: sparkle var(--dur, 2s) ease-in-out var(--del, 0s) infinite;
+}
+
+/* Toast */
+#weddingToast {
+  position: fixed; bottom: 110px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: linear-gradient(135deg, #ff6b9d, #ff1a5e);
+  color: #fff; padding: 12px 28px; border-radius: 50px;
+  font-size: 15px; font-weight: 600; z-index: 9999;
+  opacity: 0; transition: all 0.35s; pointer-events: none;
+  white-space: nowrap; box-shadow: 0 4px 20px rgba(255, 77, 121, 0.33);
+}
+#weddingToast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* Swan section */
+#swanSection {
+  text-align: center; padding: 40px 20px;
+  position: relative; overflow: hidden;
+}
+#swanSection .swan-sparkles { position: absolute; inset: 0; pointer-events: none; }
+
+/* Scroll hearts trail */
+.scroll-heart {
+  position: fixed; pointer-events: none; z-index: 9998;
+  animation: floatHeart 1.5s ease-out forwards;
+  --drift: 0px;
+}
+
+/* --- DYNAMIC GIFT BURST & FLYING SWAN ANIMATIONS --- */
+
+/* Radial burst and float upwards */
+@keyframes giftBurstFloat {
+  0% {
+    transform: translate(0, 0) scale(0.3) rotate(0deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+    transform: translate(var(--burst-x, 0px), var(--burst-y, 0px)) scale(1.1) rotate(var(--spin-init, 45deg));
+  }
+  25% {
+    opacity: 1;
+    transform: translate(var(--burst-x, 0px), var(--burst-y, 0px)) scale(1.0) rotate(var(--spin-init, 45deg));
+  }
+  100% {
+    transform: translate(calc(var(--burst-x, 0px) + var(--drift-x, 0px)), calc(-100vh + 100px)) scale(var(--scale, 0.8)) rotate(var(--spin-final, 360deg));
+    opacity: 0;
+  }
+}
+
+/* Flying Swan: Left to Right Curve */
+@keyframes swanFlyLeftToRight {
+  0% {
+    transform: translate(-150px, 80vh) scale(0.5) rotate(15deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+    transform: translate(10%, 65vh) scale(0.6) rotate(10deg);
+  }
+  50% {
+    transform: translate(50%, 35vh) scale(0.85) rotate(-5deg);
+  }
+  90% {
+    opacity: 1;
+    transform: translate(90%, 15vh) scale(1.05) rotate(-12deg);
+  }
+  100% {
+    transform: translate(calc(100% + 150px), 5vh) scale(1.1) rotate(-15deg);
+    opacity: 0;
+  }
+}
+
+/* Flying Swan: Right to Left Curve (Mirrored) */
+@keyframes swanFlyRightToLeft {
+  0% {
+    transform: translate(calc(100% + 150px), 85vh) scale(0.5) scaleX(-1) rotate(15deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+    transform: translate(90%, 70vh) scale(0.6) scaleX(-1) rotate(10deg);
+  }
+  50% {
+    transform: translate(50%, 40vh) scale(0.85) scaleX(-1) rotate(-5deg);
+  }
+  90% {
+    opacity: 1;
+    transform: translate(10%, 20vh) scale(1.05) scaleX(-1) rotate(-12deg);
+  }
+  100% {
+    transform: translate(-150px, 10vh) scale(1.1) scaleX(-1) rotate(-15deg);
+    opacity: 0;
+  }
+}
+
+/* Swan Wing Flapping keyframes */
+@keyframes flapNear {
+  0%, 100% { transform: rotate(0deg) scaleY(1); }
+  50%      { transform: rotate(-35deg) scaleY(0.5); }
+}
+@keyframes flapFar {
+  0%, 100% { transform: rotate(0deg) scaleY(1); }
+  50%      { transform: rotate(20deg) scaleY(0.6); }
+}
+
+/* Flying Swan SVG and Container */
+.swan-flying-container {
+  position: absolute;
+  z-index: 9999;
+  pointer-events: none;
+  width: 140px;
+  height: 110px;
+  will-change: transform, opacity;
+}
+.swan-flying-container.fly-lr {
+  animation: swanFlyLeftToRight var(--duration, 7s) cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+.swan-flying-container.fly-rl {
+  animation: swanFlyRightToLeft var(--duration, 7s) cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.swan-svg-flying {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 8px 16px rgba(255, 143, 171, 0.4));
+}
+
+.near-wing {
+  transform-origin: 40px 46px;
+  animation: flapNear 0.4s ease-in-out infinite;
+}
+.far-wing {
+  transform-origin: 45px 45px;
+  animation: flapFar 0.4s ease-in-out infinite;
+}
+
+/* General Gift Burst Container */
+.flying-gift-item {
+  position: fixed;
+  bottom: 28px;
+  right: 22px;
+  z-index: 9999;
+  pointer-events: none;
+  font-size: 32px;
+  animation: giftBurstFloat var(--duration, 3.5s) cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+  will-change: transform, opacity;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
+}
+
+/* --- ROTATING VINYL MUSIC PLAYER --- */
+@keyframes spinVinyl {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes floatNote {
+  0% {
+    transform: translate(0, 0) scale(0.5) rotate(0deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.95;
+  }
+  100% {
+    transform: translate(var(--drift-x, -40px), var(--drift-y, -180px)) scale(1.4) rotate(var(--spin, 90deg));
+    opacity: 0;
+  }
+}
+
+#weddingMusicBtn {
+  position: fixed;
+  bottom: 28px;
+  left: 22px;
+  z-index: 8888;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ff4d79 24%, #111 25%, #222 35%, #000 65%, #222 98%, #ff8fab 100%);
+  border: 2px solid #ffb3c6;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 24px rgba(255, 77, 121, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+#weddingMusicBtn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 32px rgba(255, 77, 121, 0.5);
+}
+#weddingMusicBtn::before {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+  z-index: 2;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+}
+#weddingMusicBtn svg {
+  width: 24px;
+  height: 24px;
+  fill: #fff;
+  z-index: 3;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
+}
+#weddingMusicBtn.playing {
+  animation: spinVinyl 5s linear infinite;
+}
+
+.music-note {
+  position: absolute;
+  z-index: 9998;
+  pointer-events: none;
+  font-size: 20px;
+  color: #ff8fab;
+  animation: floatNote var(--duration, 2.5s) ease-out forwards;
+  will-change: transform, opacity;
+  filter: drop-shadow(0 2px 4px rgba(255, 77, 121, 0.2));
+}
+
+/* --- DYNAMIC PLANE AND DROPPED BALLOON GIFTS STYLES --- */
+
+/* Plane: Left to Right Curve */
+@keyframes planeFlyLeftToRight {
+  0% {
+    transform: translate(-160px, 85vh) scale(0.4) rotate(25deg);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+    transform: translate(10%, 70vh) scale(0.6) rotate(20deg);
+  }
+  50% {
+    transform: translate(50%, 45vh) scale(0.9) rotate(15deg);
+  }
+  85% {
+    opacity: 1;
+    transform: translate(90%, 20vh) scale(1.1) rotate(10deg);
+  }
+  100% {
+    transform: translate(calc(100% + 160px), 5vh) scale(1.2) rotate(5deg);
+    opacity: 0;
+  }
+}
+
+/* Plane: Right to Left Curve (Mirrored) */
+@keyframes planeFlyRightToLeft {
+  0% {
+    transform: translate(calc(100% + 160px), 85vh) scale(0.4) scaleX(-1) rotate(25deg);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+    transform: translate(90%, 70vh) scale(0.6) scaleX(-1) rotate(20deg);
+  }
+  50% {
+    transform: translate(50%, 45vh) scale(0.9) scaleX(-1) rotate(15deg);
+  }
+  85% {
+    opacity: 1;
+    transform: translate(10%, 20vh) scale(1.1) scaleX(-1) rotate(10deg);
+  }
+  100% {
+    transform: translate(-160px, 5vh) scale(1.2) scaleX(-1) rotate(5deg);
+    opacity: 0;
+  }
+}
+
+/* Dropped gift falling with horizontal drift */
+@keyframes giftDropFall {
+  0% {
+    transform: translateY(0) translateX(0) scale(0.3);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(10px) translateX(0) scale(1.0);
+  }
+  100% {
+    transform: translateY(600px) translateX(var(--drift-x, 40px)) scale(0.7) rotate(var(--spin, 45deg));
+    opacity: 0;
+  }
+}
+
+/* Swaying balloon parachute effect */
+@keyframes swayBalloon {
+  0% { transform: rotate(-10deg); }
+  100% { transform: rotate(10deg); }
+}
+
+/* Flying Plane Container & SVG */
+.plane-flying-container {
+  position: absolute;
+  z-index: 9999;
+  pointer-events: none;
+  width: 140px;
+  height: 95px;
+  will-change: transform, opacity;
+}
+
+.plane-flying-container.fly-lr {
+  animation: planeFlyLeftToRight var(--duration, 6.5s) cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.plane-flying-container.fly-rl {
+  animation: planeFlyRightToLeft var(--duration, 6.5s) cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.plane-svg-flying {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 8px 16px rgba(255, 77, 121, 0.35));
+}
+
+/* Parachute dropped gift */
+.falling-dropped-gift {
+  position: absolute;
+  z-index: 9998;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  animation: giftDropFall var(--duration, 4.5s) cubic-bezier(0.215, 0.610, 0.355, 1.000) forwards;
+  will-change: transform, opacity;
+}
+
+.falling-dropped-gift .balloon-parachute {
+  font-size: 26px;
+  line-height: 1;
+  color: #ff6b9d;
+  filter: drop-shadow(0 3px 6px rgba(255, 107, 157, 0.45));
+  animation: swayBalloon 1.2s ease-in-out infinite alternate;
+}
+
+.falling-dropped-gift .gift-box-attached {
+  font-size: 20px;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+}
+
+/* --- TIKTOK LIVE GIFT SYSTEM STYLES --- */
+
+/* Banner slide animations */
+@keyframes bannerSlideIn {
+  0% { transform: translateX(-110%); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+@keyframes bannerSlideOut {
+  0% { transform: translateX(0); opacity: 1; }
+  100% { transform: translateX(-110%); opacity: 0; }
+}
+
+/* Combo multiplier pulse */
+@keyframes comboPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.6) rotate(-15deg); filter: drop-shadow(0 0 8px #ffd700); }
+  100% { transform: scale(1.2) rotate(-5deg); opacity: 1; }
+}
+
+/* Aura and Sparkle Ring animations */
+@keyframes auraPulse {
+  0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.55; }
+  100% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.85; }
+}
+
+@keyframes ringRotate {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes sparkleTwinkle {
+  0% { transform: translate(-50%, -50%) scale(0.7); opacity: 0.5; }
+  100% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
+}
+
+/* Center screen scale up */
+@keyframes vipScaleUp {
+  0% { transform: scale(0.3); opacity: 0; }
+  70% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* VIP Rings merging */
+@keyframes ringMergeLeft {
+  0% { transform: translateX(-130px) rotate(-30deg); opacity: 0; }
+  100% { transform: translateX(-16px) rotate(-12deg); opacity: 1; }
+}
+@keyframes ringMergeRight {
+  0% { transform: translateX(130px) rotate(30deg); opacity: 0; }
+  100% { transform: translateX(16px) rotate(12deg); opacity: 1; }
+}
+
+/* VIP Wedding Car driving across screen */
+@keyframes carDriveAcross {
+  0% { transform: translateX(-280px) scale(0.7); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateX(calc(100% + 280px)) scale(0.9); opacity: 0; }
+}
+
+/* VIP Ferris Wheel rotate */
+@keyframes ferrisWheelSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* TikTok Gift Banner Container */
+.tiktok-gift-banner {
+  position: fixed;
+  left: 20px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(90deg, rgba(255, 77, 121, 0.9), rgba(255, 143, 171, 0.7));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  border-radius: 50px;
+  padding: 6px 20px 6px 6px;
+  color: #fff;
+  min-width: 250px;
+  max-width: 320px;
+  box-shadow: 0 8px 32px rgba(255, 77, 121, 0.3);
+  animation: bannerSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  will-change: transform, opacity;
+  font-family: 'Lora', serif;
+}
+.tiktok-gift-banner.slide-out {
+  animation: bannerSlideOut 0.35s ease-in forwards;
+}
+
+.tiktok-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.tiktok-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+.tiktok-info .sender-name {
+  font-weight: 700;
+  font-size: 13px;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+.tiktok-info .gift-text {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.tiktok-gift-icon-container {
+  font-size: 30px;
+  animation: comboPulse 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.5) 0.25s forwards;
+  transform: scale(0);
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.tiktok-combo {
+  font-size: 28px;
+  font-weight: 900;
+  font-style: italic;
+  color: #ffd700;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.3), 0 0 10px rgba(255, 215, 0, 0.6);
+  margin-left: 8px;
+  animation: comboPulse 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.5) 0.3s forwards;
+  transform: scale(0);
+  opacity: 0;
+}
+
+/* Fullscreen VIP overlay */
+.vip-overlay {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 450px;
+  height: 100%;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 9990;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  overflow: hidden;
+}
+.vip-overlay.active {
+  opacity: 1;
+}
+
+.vip-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: vipScaleUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.25) forwards;
+  width: 100%;
+  max-width: 100%;
+}
+
+.vip-glow-aura {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, rgba(255, 215, 0, 0.4) 0%, rgba(255, 77, 121, 0.2) 50%, transparent 70%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: auraPulse 3s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: -1;
+  filter: blur(10px);
+}
+
+.vip-sparkle-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 280px;
+  height: 280px;
+  transform: translate(-50%, -50%);
+  animation: ringRotate 15s linear infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.vip-sparkle-ring span {
+  display: inline-block;
+  animation: sparkleTwinkle 1.8s ease-in-out infinite alternate;
+}
+
+.vip-sparkle-ring span:nth-child(even) {
+  animation-delay: 0.9s;
+}
+
+/* VIP Rings specific styling */
+.vip-rings-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 160px;
+  position: relative;
+  width: 280px;
+}
+.vip-ring {
+  width: 110px;
+  height: 110px;
+  position: absolute;
+  filter: drop-shadow(0 0 16px rgba(255, 215, 0, 0.7));
+}
+.vip-ring.left-ring {
+  animation: ringMergeLeft 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.2) forwards;
+}
+.vip-ring.right-ring {
+  animation: ringMergeRight 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.2) forwards;
+}
+
+/* VIP Car specific styling */
+.vip-car-wrap {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+  z-index: 9995;
+}
+.vip-car-el {
+  width: 240px;
+  height: 120px;
+  animation: carDriveAcross 5.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  filter: drop-shadow(0 6px 15px rgba(0,0,0,0.45));
+}
+
+/* VIP Ferris Wheel specific styling */
+.vip-wheel-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.vip-wheel-svg {
+  width: 190px;
+  height: 190px;
+  animation: ferrisWheelSpin 8s linear infinite;
+  filter: drop-shadow(0 0 20px rgba(255, 77, 121, 0.7));
+}
+
+/* VIP Castle specific styling */
+.vip-castle-svg {
+  width: 210px;
+  height: 190px;
+  filter: drop-shadow(0 0 24px rgba(255, 215, 0, 0.65));
+}
+
+/* VIP Text label on screen */
+.vip-sender-title {
+  font-family: 'Great Vibes', cursive;
+  font-size: 36px;
+  color: #ffd700;
+  text-align: center;
+  margin-top: 15px;
+  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 215, 0, 0.7);
+}
+.vip-gift-title {
+  font-family: 'Lora', serif;
+  font-size: 15px;
+  color: #fff;
+  text-align: center;
+  margin-top: 6px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+/* Center normal gift pop-up scale */
+.normal-center-pop {
+  font-size: 80px;
+  animation: vipScaleUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.25) forwards;
+  filter: drop-shadow(0 8px 24px rgba(255, 77, 121, 0.4));
+}
+
+/* Constrain floating elements and panels to the centered mobile layout on desktop */
+@media (min-width: 450px) {
+  #weddingMusicBtn {
+    left: calc(50% - 225px + 22px) !important;
+  }
+  #weddingGiftBtn {
+    right: calc(50% - 225px + 22px) !important;
+  }
+  .tiktok-gift-banner {
+    left: calc(50% - 225px + 20px) !important;
+  }
+  #weddingGiftPanel {
+    max-width: 450px !important;
+  }
+}
+
+/* =============================================
+   QR Person Toggle (Bride / Groom)
+   ============================================= */
+.qr-person-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 16px 6px;
+}
+
+.qr-person-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 18px;
+  border: 2px solid #ffb3c6;
+  border-radius: 16px;
+  background: #fff0f5;
+  color: #c0527a;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  flex: 1;
+}
+
+.qr-person-btn .qr-person-avatar {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.qr-person-btn:hover {
+  background: #ffe0ec;
+  border-color: #ff4d79;
+  transform: translateY(-2px);
+}
+
+.qr-person-btn.active {
+  background: linear-gradient(135deg, #ff4d79, #ff8fab);
+  border-color: #ff4d79;
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(255, 77, 121, 0.4);
+  transform: translateY(-2px);
+}
+
+.qr-toggle-heart {
+  font-size: 22px;
+  animation: heartPulse 1.4s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes heartPulse {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.22); }
+}
+
+
+
+
+
+
+
+
+

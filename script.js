@@ -8,7 +8,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const henImg = document.getElementById('henImg');
   if (henImg) setTimeout(() => henImg.classList.add('show'), 500);
 
-  startHearts();
+  // startHearts(); // Disabled to use premium SVG hearts from wedding-effects.js instead
   initScrollReveal();
 
   // Tên khách từ URL
@@ -49,7 +49,8 @@ function initScrollReveal() {
   createObserver(revealNormal);
 }
 
-// ===================== TIM BAY =====================
+// ===================== TIM BAY (DISABLED) =====================
+/*
 function startHearts() {
   setInterval(() => {
     const heart = document.createElement('div');
@@ -62,6 +63,7 @@ function startHearts() {
     setTimeout(() => heart.remove(), 10000);
   }, 1200);
 }
+*/
 
 // ===================== CANVAS TIM =====================
 const canvas = document.getElementById("heartCanvas");
