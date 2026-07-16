@@ -1023,7 +1023,7 @@ button:hover { opacity: 0.85; }
 
 /* Flying Swan SVG and Container */
 .swan-flying-container {
-  position: absolute;
+  position: fixed;
   z-index: 9999;
   pointer-events: none;
   width: 140px;
@@ -1040,7 +1040,7 @@ button:hover { opacity: 0.85; }
 .swan-svg-flying {
   width: 100%;
   height: 100%;
-  filter: drop-shadow(0 8px 16px rgba(255, 143, 171, 0.4));
+  filter: drop-shadow(0 0 6px #ffd700) drop-shadow(0 4px 12px rgba(255, 77, 121, 0.65));
 }
 
 .near-wing {
@@ -1210,7 +1210,7 @@ button:hover { opacity: 0.85; }
 
 /* Flying Plane Container & SVG */
 .plane-flying-container {
-  position: absolute;
+  position: fixed;
   z-index: 9999;
   pointer-events: none;
   width: 140px;
@@ -1234,7 +1234,7 @@ button:hover { opacity: 0.85; }
 
 /* Parachute dropped gift */
 .falling-dropped-gift {
-  position: absolute;
+  position: fixed;
   z-index: 9998;
   pointer-events: none;
   display: flex;
@@ -1311,18 +1311,78 @@ button:hover { opacity: 0.85; }
   100% { transform: translateX(16px) rotate(12deg); opacity: 1; }
 }
 
-/* VIP Wedding Car driving across screen */
+/* VIP Wedding Car driving across screen - Stop and Release path */
 @keyframes carDriveAcross {
-  0% { transform: translateX(-280px) scale(0.7); opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { transform: translateX(calc(100% + 280px)) scale(0.9); opacity: 0; }
+  0% { transform: translateX(-260px) translateY(0px) rotate(0deg) scale(0.75); opacity: 0; }
+  15% { transform: translateX(-30px) translateY(0px) rotate(0deg) scale(0.75); opacity: 1; }
+  25% { transform: translateX(90px) translateY(0px) rotate(0deg) scale(0.75); }
+  55% { transform: translateX(90px) translateY(0px) rotate(0deg) scale(0.75); }
+  70% { transform: translateX(180px) translateY(0px) rotate(0deg) scale(0.75); }
+  85% { transform: translateX(330px) translateY(0px) rotate(0deg) scale(0.75); opacity: 1; }
+  100% { transform: translateX(480px) translateY(0px) rotate(0deg) scale(0.75); opacity: 0; }
 }
 
-/* VIP Ferris Wheel rotate */
-@keyframes ferrisWheelSpin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
+/* =============================================
+   VIP Car Animation - Bobblehead & Balloons
+   ============================================= */
+.bobble-head-bride {
+  transform-origin: 64px 43px;
+  animation: bobbleBride 1.4s ease-in-out infinite alternate;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3));
+}
+.bobble-head-groom {
+  transform-origin: 92px 42px;
+  animation: bobbleGroom 1.4s ease-in-out infinite alternate;
+  animation-delay: -0.7s;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3));
+}
+
+/* VIP Cherry Blossom animations */
+@keyframes centerFlowerBloom {
+  0% { transform: scale(0) rotate(-45deg); opacity: 0; }
+  15% { transform: scale(1.1) rotate(10deg); opacity: 1; }
+  25% { transform: scale(1) rotate(0deg); opacity: 1; }
+  80% { transform: scale(1) rotate(15deg); opacity: 1; }
+  100% { transform: scale(0.6) rotate(45deg); opacity: 0; }
+}
+
+@keyframes subFlowerBloomLeft {
+  0% { transform: scale(0) rotate(45deg); opacity: 0; }
+  15% { transform: scale(1.05) rotate(-15deg); opacity: 0.9; }
+  25% { transform: scale(1) rotate(-10deg); opacity: 0.9; }
+  80% { transform: scale(1) rotate(-25deg); opacity: 0.9; }
+  100% { transform: scale(0.5) rotate(-45deg); opacity: 0; }
+}
+
+@keyframes subFlowerBloomRight {
+  0% { transform: scale(0) rotate(-30deg); opacity: 0; }
+  15% { transform: scale(1.05) rotate(15deg); opacity: 0.95; }
+  25% { transform: scale(1) rotate(5deg); opacity: 0.95; }
+  80% { transform: scale(1) rotate(20deg); opacity: 0.95; }
+  100% { transform: scale(0.5) rotate(40deg); opacity: 0; }
+}
+
+@keyframes floatFlower {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(-4px) rotate(15deg); }
+}
+
+@keyframes fallAndSway {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg) scale(0.2);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(20px) translateX(var(--sway-x, 15px)) rotate(45deg) scale(1);
+  }
+  50% {
+    transform: translateY(250px) translateX(calc(var(--sway-x, 15px) * -1.5)) rotate(180deg) scale(1.1);
+  }
+  100% {
+    transform: translateY(var(--fall-y, 500px)) translateX(var(--drift-x, 40px)) rotate(360deg) scale(0.7);
+    opacity: 0;
+  }
 }
 
 /* TikTok Gift Banner Container */
@@ -1500,9 +1560,11 @@ button:hover { opacity: 0.85; }
 
 /* VIP Car specific styling */
 .vip-car-wrap {
-  position: absolute;
-  left: 0;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
   width: 100%;
+  max-width: 450px;
   pointer-events: none;
   z-index: 9995;
 }
@@ -1513,18 +1575,86 @@ button:hover { opacity: 0.85; }
   filter: drop-shadow(0 6px 15px rgba(0,0,0,0.45));
 }
 
-/* VIP Ferris Wheel specific styling */
-.vip-wheel-wrap {
+/* VIP Cherry Blossom specific styling */
+.vip-cherry-wrap {
+  position: relative;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 320px;
+  height: 320px;
+  overflow: visible;
 }
-.vip-wheel-svg {
-  width: 190px;
-  height: 190px;
-  animation: ferrisWheelSpin 8s linear infinite;
-  filter: drop-shadow(0 0 20px rgba(255, 77, 121, 0.7));
+
+.vip-cherry-center-bloom {
+  position: absolute;
+  transform-origin: center;
+  animation: centerFlowerBloom 4.5s ease-in-out forwards;
+  filter: drop-shadow(0 0 20px rgba(255, 26, 94, 0.8));
+  z-index: 2;
+}
+
+.vip-cherry-sub-bloom {
+  position: absolute;
+  transform-origin: center;
+  filter: drop-shadow(0 0 12px rgba(255, 179, 198, 0.7));
+  opacity: 0;
+  z-index: 1;
+}
+
+.vip-cherry-sub-bloom.left {
+  left: -20px;
+  top: 40px;
+  animation: subFlowerBloomLeft 4.5s ease-in-out 0.4s forwards;
+}
+
+.vip-cherry-sub-bloom.right {
+  right: -10px;
+  bottom: 30px;
+  animation: subFlowerBloomRight 4.5s ease-in-out 0.2s forwards;
+}
+
+/* Banner Cherry Decorations */
+.tiktok-gift-banner.tiktok-banner-cherry {
+  background: linear-gradient(90deg, rgba(255, 107, 157, 0.95), rgba(255, 26, 94, 0.9)) !important;
+  border: 2px solid #fff !important;
+  box-shadow: 0 8px 24px rgba(255, 26, 94, 0.4) !important;
+  position: relative;
+  overflow: visible !important;
+}
+
+.banner-cherry-deco-left {
+  position: absolute;
+  top: -16px;
+  left: -12px;
+  z-index: 10;
+  filter: drop-shadow(0 2px 6px rgba(255, 26, 94, 0.4));
+  animation: floatFlower 3s ease-in-out infinite alternate;
+}
+
+.banner-cherry-deco-right {
+  position: absolute;
+  right: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  z-index: 10;
+  filter: drop-shadow(0 2px 6px rgba(255, 26, 94, 0.4));
+}
+
+/* Falling Cherry Petals */
+.falling-cherry-petal {
+  position: absolute;
+  z-index: 9993;
+  pointer-events: none;
+  background: linear-gradient(135deg, #ffffff, #ffb3c6 50%, #ff4d79);
+  width: 14px;
+  height: 14px;
+  border-radius: 50% 0 50% 50%;
+  box-shadow: 0 2px 5px rgba(255, 77, 121, 0.3);
+  transform-origin: center;
+  animation: fallAndSway var(--duration, 4s) linear forwards;
 }
 
 /* VIP Castle specific styling */
@@ -1634,6 +1764,730 @@ button:hover { opacity: 0.85; }
   0%, 100% { transform: scale(1); }
   50%       { transform: scale(1.22); }
 }
+
+/* =============================================
+   VIP Car Animation - Bobblehead & Balloons
+   ============================================= */
+.bobble-head-bride {
+  transform-origin: 64px 43px;
+  animation: bobbleBride 1.4s ease-in-out infinite alternate;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3));
+}
+.bobble-head-groom {
+  transform-origin: 92px 42px;
+  animation: bobbleGroom 1.4s ease-in-out infinite alternate;
+  animation-delay: -0.7s;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3));
+}
+
+@keyframes bobbleBride {
+  0% { transform: rotate(-8deg); }
+  100% { transform: rotate(8deg); }
+}
+
+@keyframes bobbleGroom {
+  0% { transform: rotate(-7deg); }
+  100% { transform: rotate(9deg); }
+}
+
+.car-balloons-group {
+  transform-origin: 83px 49px;
+  animation: balloonsWindSway 2s ease-in-out infinite alternate;
+}
+
+@keyframes balloonsWindSway {
+  0% { transform: rotate(-3deg) skewX(-2deg); }
+  100% { transform: rotate(5deg) skewX(2deg); }
+}
+
+.car-balloons-group.released {
+  animation: releaseBalloons 3.5s cubic-bezier(0.1, 0.8, 0.3, 1) forwards !important;
+}
+
+@keyframes releaseBalloons {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  30% {
+    transform: translate(-30px, -120px) scale(0.9);
+  }
+  100% {
+    transform: translate(-260px, -500px) scale(0.65);
+    opacity: 0;
+  }
+}
+
+/* =============================================
+   Premium Pop-up Overlay (Cinelove.me Style)
+   ============================================= */
+.vip-gift-badge {
+  display: flex;
+  align-items: center;
+  padding: 8px 24px 8px 10px;
+  background: linear-gradient(90deg, #7b1fa2, #e91e63, #ff4081);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50px;
+  box-shadow: 0 10px 30px rgba(233, 30, 99, 0.5), inset 0 2px 4px rgba(255,255,255,0.2);
+  margin-top: 25px;
+  gap: 12px;
+  animation: badgeSlideUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.25) 0.2s forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+@keyframes badgeSlideUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.vip-badge-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.vip-badge-info {
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+  text-align: left;
+  line-height: 1.35;
+  font-family: 'Lora', serif;
+}
+
+.vip-badge-sender {
+  font-weight: 700;
+  font-size: 14px;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+.vip-badge-action {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.vip-butterfly {
+  position: absolute;
+  font-size: 24px;
+  pointer-events: none;
+  z-index: 9992;
+  animation: floatUpward var(--float-dur, 6s) linear forwards, wingFlap 0.3s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+
+.vip-glow-particle {
+  position: absolute;
+  width: var(--size, 6px);
+  height: var(--size, 6px);
+  border-radius: 50%;
+  background: var(--color, #fff);
+  pointer-events: none;
+  z-index: 9991;
+  animation: floatUpward var(--float-dur, 5s) ease-out forwards;
+  filter: blur(0.5px);
+  box-shadow: 0 0 8px currentColor;
+  will-change: transform, opacity;
+}
+
+@keyframes floatUpward {
+  0% {
+    transform: translateY(100vh) translateX(0px) scale(0.3);
+    opacity: 0;
+  }
+  15% {
+    opacity: var(--max-op, 0.8);
+    transform: translateY(70vh) translateX(var(--drift-x1, 30px)) scale(1);
+  }
+  50% {
+    transform: translateY(30vh) translateX(var(--drift-x2, -20px)) scale(1.1);
+  }
+  85% {
+    opacity: var(--max-op, 0.8);
+  }
+  100% {
+    transform: translateY(-20vh) translateX(var(--drift-x3, 40px)) scale(0.5);
+    opacity: 0;
+  }
+}
+
+@keyframes wingFlap {
+  0% { transform: scaleX(1); }
+  100% { transform: scaleX(0.3); }
+}
+
+.vip-twinkle-star {
+  position: absolute;
+  color: #ffd700;
+  font-size: var(--size, 20px);
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.9), 0 0 15px rgba(255, 255, 255, 0.6);
+  pointer-events: none;
+  z-index: 9993;
+  animation: starTwinkle var(--twinkle-dur, 1.5s) ease-in-out infinite alternate;
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+
+@keyframes starTwinkle {
+  0% {
+    transform: translate(-50%, -50%) scale(0.2) rotate(0deg);
+    opacity: 0.1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(var(--scale, 1)) rotate(180deg);
+    opacity: 1;
+  }
+}
+
+
+/* =============================================
+   Love Doves Animation
+   ============================================= */
+.vip-doves-wrap {
+  position: relative;
+  width: 280px;
+  height: 160px;
+  margin: 0 auto;
+  overflow: visible;
+}
+
+.dove-svg {
+  position: absolute;
+  width: 90px;
+  height: 72px;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15));
+  will-change: transform, opacity;
+}
+
+.dove-left {
+  left: -120px;
+  top: 40px;
+  opacity: 0;
+  animation: doveLeftFlyIn 2.2s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+}
+
+@keyframes doveLeftFlyIn {
+  to {
+    left: 30px;
+    top: 30px;
+    opacity: 1;
+  }
+}
+
+.dove-right {
+  right: -120px;
+  top: 40px;
+  opacity: 0;
+  transform: scaleX(-1);
+  animation: doveRightFlyIn 2.2s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+}
+
+@keyframes doveRightFlyIn {
+  to {
+    right: 30px;
+    top: 30px;
+    opacity: 1;
+    transform: scaleX(-1);
+  }
+}
+
+.dove-heart {
+  position: absolute;
+  left: 50%;
+  top: 25px;
+  transform: translate(-50%, -50%) scale(0);
+  font-size: 32px;
+  filter: drop-shadow(0 0 10px #ff1a5e);
+  opacity: 0;
+  animation: doveHeartPop 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.6s forwards;
+}
+
+@keyframes doveHeartPop {
+  to {
+    transform: translate(-50%, -50%) scale(1.3);
+    opacity: 1;
+  }
+}
+
+.dove-wing-flap {
+  transform-origin: 45px 45px;
+  animation: doveWingFlap 0.25s ease-in-out infinite alternate;
+}
+.dove-wing-flap-near {
+  transform-origin: 40px 48px;
+  animation: doveWingFlap 0.25s ease-in-out infinite alternate;
+}
+
+@keyframes doveWingFlap {
+  0% { transform: rotate(-8deg); }
+  100% { transform: rotate(18deg); }
+}
+
+/* =============================================
+   Royal Gate Opening Cover - Traditional 3D Gatefold
+   ============================================= */
+#wedding-envelope-wrapper {
+  position: fixed;
+  left: 50%;
+  top: 0;
+  width: 100%;
+  max-width: 450px;
+  height: 100%;
+  transform: translate(-50%, 0);
+  z-index: 99999;
+  overflow: hidden;
+  background-color: #1a0203; /* Deep dark background revealed briefly during opening */
+  box-shadow: 0 0 35px rgba(0, 0, 0, 0.5);
+  transition: opacity 1.2s ease-in-out, transform 1.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+  will-change: transform, opacity;
+  perspective: 1400px; /* Enable 3D depth */
+}
+
+#wedding-envelope-wrapper.opened {
+  opacity: 0;
+  transform: translate(-50%, -50px) scale(0.95);
+  pointer-events: none;
+}
+
+/* Gate panels as 3D doors */
+.gate-panel {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 50.5%; /* Overlap 0.5% in the middle to prevent gaps */
+  background: #2b0204; /* Dark red-black wood frame background */
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
+  transform-style: preserve-3d;
+  will-change: transform;
+  z-index: 10;
+}
+
+.gate-left {
+  left: 0;
+  transform-origin: left center;
+  transition: transform 1.5s cubic-bezier(0.25, 1, 0.3, 1);
+}
+
+.gate-right {
+  right: 0;
+  transform-origin: right center;
+  transition: transform 1.5s cubic-bezier(0.25, 1, 0.3, 1);
+}
+
+#wedding-envelope-wrapper.opening .gate-left {
+  transform: translateX(-100%);
+}
+
+#wedding-envelope-wrapper.opening .gate-right {
+  transform: translateX(100%);
+}
+
+/* Inner panel with gold border & red lacquer gradient */
+.gate-inner {
+  position: absolute;
+  background: radial-gradient(circle at center, #b80d13 0%, #4a0103 100%);
+  box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.85);
+  box-sizing: border-box;
+}
+
+/* Brocade/Velvet Pattern Overlay */
+.gate-inner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.06;
+  background: 
+    repeating-linear-gradient(45deg, #ffd700 0, #ffd700 1px, transparent 0, transparent 50%),
+    repeating-linear-gradient(-45deg, #ffd700 0, #ffd700 1px, transparent 0, transparent 50%);
+  background-size: 14px 14px;
+  pointer-events: none;
+}
+
+.gate-left .gate-inner {
+  top: 14px;
+  bottom: 14px;
+  left: 14px;
+  right: 0;
+  border: 2px solid #ffd700;
+  border-right: none;
+  border-radius: 4px 0 0 4px;
+}
+
+.gate-right .gate-inner {
+  top: 14px;
+  bottom: 14px;
+  right: 14px;
+  left: 0;
+  border: 2px solid #ffd700;
+  border-left: none;
+  border-radius: 0 4px 4px 0;
+}
+
+/* Elegant traditional lotus watermark inside panels */
+.gate-watermark {
+  position: absolute;
+  bottom: 25px;
+  width: 90%;
+  height: 60%;
+  left: 5%;
+  pointer-events: none;
+  z-index: 11;
+  opacity: 0.12;
+  transition: opacity 0.5s ease;
+}
+
+/* Ornate gold corner SVGs - Traditional Vietnamese/Chinese Cloud & Key Fret */
+.gate-corner-ornament {
+  position: absolute;
+  width: 75px;
+  height: 75px;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+  opacity: 0.95;
+  z-index: 15;
+}
+.corner-tl { top: 10px; left: 10px; }
+.corner-bl { bottom: 10px; left: 10px; transform: scaleY(-1); }
+.corner-tr { top: 10px; right: 10px; transform: scaleX(-1); }
+.corner-br { bottom: 10px; right: 10px; transform: scale(-1); }
+
+/* Central lock mechanism - Splits in half */
+.gate-lock-half {
+  position: absolute;
+  top: 50%;
+  width: 70px; /* Half of 140px total size */
+  height: 140px;
+  z-index: 20;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.3, 1);
+}
+
+.lock-half-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.4));
+  transition: filter 0.3s ease;
+}
+
+.gate-left .gate-lock-half {
+  right: 0;
+  transform: translateY(-50%);
+  transform-origin: right center;
+}
+
+.gate-right .gate-lock-half {
+  left: 0;
+  transform: translateY(-50%);
+  transform-origin: left center;
+}
+
+/* Hover glow on seal */
+.gate-lock-half:hover .lock-half-svg {
+  filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.75)) drop-shadow(0 4px 10px rgba(0, 0, 0, 0.4));
+}
+
+/* Pulse rings around seal halves */
+.wax-seal-pulse-ring-half {
+  position: absolute;
+  top: 50%;
+  width: 140px;
+  height: 140px;
+  border: 1.5px solid rgba(255, 215, 0, 0.5);
+  pointer-events: none;
+  z-index: 18;
+}
+
+.gate-left .wax-seal-pulse-ring-half {
+  right: 0;
+  transform: translate(50%, -50%);
+  border-radius: 140px 0 0 140px;
+  border-right: none;
+  animation: waxPulseLeft 2.2s ease-out infinite;
+}
+
+.gate-right .wax-seal-pulse-ring-half {
+  left: 0;
+  transform: translate(-50%, -50%);
+  border-radius: 0 140px 140px 0;
+  border-left: none;
+  animation: waxPulseRight 2.2s ease-out infinite;
+}
+
+@keyframes waxPulseLeft {
+  0%   { transform: translate(50%, -50%) scale(0.95);   opacity: 0.8; }
+  100% { transform: translate(50%, -50%) scale(1.6); opacity: 0; }
+}
+
+@keyframes waxPulseRight {
+  0%   { transform: translate(-50%, -50%) scale(0.95);   opacity: 0.8; }
+  100% { transform: translate(-50%, -50%) scale(1.6); opacity: 0; }
+}
+
+/* Hint text container at bottom center */
+.gate-hint-wrapper {
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 25;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+#wedding-envelope-wrapper.opening .gate-hint-wrapper {
+  opacity: 0;
+}
+
+/* Styled text for the hint */
+.wax-seal-hint-text {
+  font-size: 10px;
+  color: #ffd700;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: rgba(84, 0, 2, 0.85);
+  padding: 6px 16px;
+  border-radius: 999px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 215, 0, 0.4);
+  animation: bounceHint 1.6s ease-in-out infinite;
+  display: inline-block;
+}
+
+@keyframes bounceHint {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-5px); }
+}
+
+/* Ambient floating sparkles on the cover wrapper */
+.ambient-sparkle {
+  position: absolute;
+  pointer-events: none;
+  color: #ffd700;
+  animation: floatUpwardAmbient linear infinite;
+  opacity: 0;
+  font-size: 14px;
+  will-change: transform, opacity;
+  z-index: 12;
+}
+
+@keyframes floatUpwardAmbient {
+  0%   { transform: translateY(0)    rotate(0deg);   opacity: 0; }
+  15%  { opacity: 0.85; }
+  85%  { opacity: 0.6; }
+  100% { transform: translateY(-85vh) rotate(360deg); opacity: 0; }
+}
+
+/* Locked scroll state */
+body {
+  overflow-y: hidden;
+}
+
+body.card-opened {
+  overflow-y: auto;
+}
+
+/* Slide up reveal for main invitation card */
+#card {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 1.2s cubic-bezier(0.25, 0.8, 0.25, 1), transform 1.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+  pointer-events: none;
+}
+
+body.card-opened #card {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* VIP Hot Air Balloon floating up carrying the couple */
+.vip-balloon-wrap {
+  position: fixed;
+  left: 50%;
+  width: 200px;
+  height: 300px;
+  z-index: 9995;
+  pointer-events: none;
+  animation: balloonFloatUp 6.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes balloonFloatUp {
+  0% {
+    transform: translate(-50%, 105vh) scale(0.7) rotate(-6deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+    transform: translate(-50%, 75vh) scale(0.95) rotate(4deg);
+  }
+  50% {
+    transform: translate(calc(-50% + 25px), 40vh) scale(1) rotate(-3deg);
+  }
+  80% {
+    opacity: 1;
+    transform: translate(calc(-50% - 25px), 10vh) scale(0.95) rotate(3deg);
+  }
+  100% {
+    transform: translate(-50%, -350px) scale(0.7) rotate(-5deg);
+    opacity: 0;
+  }
+}
+
+/* VIP Lovebirds Flock follower styles */
+.vip-flock-container {
+  position: fixed;
+  width: 120px;
+  height: 120px;
+  z-index: 9994;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.vip-flock-left {
+  left: calc(50% - 150px);
+}
+
+.vip-flock-right {
+  left: calc(50% + 150px);
+}
+
+.vip-flock-center {
+  left: 50%;
+}
+
+@keyframes flockFloatUpLeft {
+  0% {
+    transform: translate(-50%, 105vh) scale(0.5);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+    transform: translate(-50%, 82vh) scale(0.7);
+  }
+  50% {
+    transform: translate(calc(-50% - 20px), 50vh) scale(0.9);
+  }
+  80% {
+    opacity: 1;
+    transform: translate(calc(-50% - 10px), 20vh) scale(0.85);
+  }
+  100% {
+    transform: translate(-50%, -350px) scale(0.5);
+    opacity: 0;
+  }
+}
+
+@keyframes flockFloatUpRight {
+  0% {
+    transform: translate(-50%, 105vh) scale(0.5);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+    transform: translate(-50%, 78vh) scale(0.7);
+  }
+  50% {
+    transform: translate(calc(-50% + 20px), 46vh) scale(0.9);
+  }
+  80% {
+    opacity: 1;
+    transform: translate(calc(-50% + 10px), 16vh) scale(0.85);
+  }
+  100% {
+    transform: translate(-50%, -350px) scale(0.5);
+    opacity: 0;
+  }
+}
+
+@keyframes flockFloatUpCenter {
+  0% {
+    transform: translate(-50%, 115vh) scale(0.5);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+    transform: translate(-50%, 90vh) scale(0.7);
+  }
+  50% {
+    transform: translate(calc(-50% + 10px), 58vh) scale(0.95);
+  }
+  80% {
+    opacity: 1;
+    transform: translate(calc(-50% - 10px), 28vh) scale(0.9);
+  }
+  100% {
+    transform: translate(-50%, -350px) scale(0.5);
+    opacity: 0;
+  }
+}
+
+.vip-bird-follower {
+  position: absolute;
+  width: 45px;
+  height: 36px;
+  pointer-events: none;
+  z-index: 9994;
+  opacity: 0;
+  will-change: left, top, transform, opacity;
+  filter: drop-shadow(0 0 3px #ffd700);
+  animation: birdGlow 1.2s ease-in-out infinite alternate, birdWobble 1.6s ease-in-out infinite alternate;
+}
+
+@keyframes birdGlow {
+  0% {
+    filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.7)) drop-shadow(0 0 4px rgba(255, 77, 121, 0.4));
+  }
+  100% {
+    filter: drop-shadow(0 0 6px rgba(255, 215, 0, 1)) drop-shadow(0 0 10px rgba(255, 77, 121, 0.8));
+  }
+}
+
+@keyframes birdWobble {
+  0% {
+    margin-top: -4px;
+    margin-left: -1px;
+  }
+  100% {
+    margin-top: 4px;
+    margin-left: 1px;
+  }
+}
+
+.swan-hovering {
+  animation: swanHover 2.2s ease-in-out infinite alternate;
+}
+
+@keyframes swanHover {
+  0% {
+    margin-top: -5px;
+    margin-left: -2px;
+  }
+  100% {
+    margin-top: 5px;
+    margin-left: 2px;
+  }
+}
+
+.bird-wing-flap {
+  transform-origin: 20px 16px;
+  animation: birdWingFlap 0.2s ease-in-out infinite alternate;
+}
+
+@keyframes birdWingFlap {
+  0% { transform: rotate(-15deg); }
+  100% { transform: rotate(25deg); }
+}
+
 
 
 

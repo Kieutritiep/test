@@ -16,6 +16,73 @@ window.addEventListener('DOMContentLoaded', () => {
   const name = params.get("name");
   if (name) {
     document.getElementById("guestName").innerText = name;
+    const envGuest = document.getElementById("envelopeGuestName");
+    if (envGuest) envGuest.innerText = name;
+  }
+
+  // Khởi tạo hạt vàng bay lơ lửng trên màn cổng
+  initAmbientSparkles();
+
+  // Xử lý mở thiệp thư cưới
+  const envelope = document.getElementById('wedding-envelope-wrapper');
+  if (envelope) {
+    envelope.addEventListener('click', () => {
+      if (envelope.classList.contains('opening')) return;
+      envelope.classList.add('opening');
+      
+      // Tạo vụ nổ hạt lấp lánh màu vàng kim ở giữa màn hình (nơi dấu sáp vỡ ra)
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      for (let i = 0; i < 30; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.innerText = Math.random() > 0.5 ? '✨' : '✦';
+        sparkle.style.cssText = `
+          position: fixed;
+          left: ${centerX}px;
+          top: ${centerY}px;
+          z-index: 999999;
+          font-size: ${12 + Math.random() * 14}px;
+          color: #ffd700;
+          text-shadow: 0 0 8px #ffb300;
+          pointer-events: none;
+          transform: translate(-50%, -50%);
+          transition: transform 1.2s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 1.2s ease-out;
+        `;
+        document.body.appendChild(sparkle);
+        
+        const angle = Math.random() * Math.PI * 2;
+        const dist = 60 + Math.random() * 140;
+        const tx = Math.cos(angle) * dist;
+        const ty = Math.sin(angle) * dist;
+        
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            sparkle.style.transform = `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(1.5) rotate(${Math.random() * 360}deg)`;
+            sparkle.style.opacity = '0';
+          });
+        });
+        
+        setTimeout(() => sparkle.remove(), 1300);
+      }
+      
+      // Tự động phát nhạc nếu có nút nhạc nền hoạt động
+      const musicBtn = document.getElementById('weddingMusicBtn');
+      if (musicBtn && !musicBtn.classList.contains('playing')) {
+        musicBtn.click();
+      }
+      
+      setTimeout(() => {
+        envelope.classList.add('opened');
+        document.body.classList.add('card-opened');
+        
+        // Buộc trình duyệt tính toán lại hiệu ứng cuộn reveal
+        window.dispatchEvent(new Event('scroll'));
+        
+        setTimeout(() => {
+          envelope.remove();
+        }, 1200);
+      }, 1300);
+    });
   }
 });
 
@@ -200,3 +267,43 @@ document.querySelector(".next").onclick = () => { index = (index + 1) % total; u
 document.querySelector(".prev").onclick = () => { index = (index - 1 + total) % total; updateSlide(); };
 
 setInterval(() => { index = (index + 1) % total; updateSlide(); }, 4000);
+
+/* =============================================
+   Ambient Sparkles – Golden stars drifting up
+   before the gates open
+   ============================================= */
+function initAmbientSparkles() {
+  const wrapper = document.getElementById('wedding-envelope-wrapper');
+  if (!wrapper) return;
+
+  const CHARS = ['✦', '✧', '✨', '⋆', '✫', '✬'];
+  const SPARKLE_COUNT = 14;
+
+  for (let i = 0; i < SPARKLE_COUNT; i++) {
+    const el = document.createElement('span');
+    el.className = 'ambient-sparkle';
+    el.innerText = CHARS[Math.floor(Math.random() * CHARS.length)];
+
+    // Random horizontal position across full width
+    const left = 4 + Math.random() * 92;
+    // Start at a random vertical position in the bottom 60%
+    const startBottom = 5 + Math.random() * 60;
+    // Random size (slightly smaller for elegance)
+    const size = 10 + Math.random() * 10;
+    // Random duration (slow drift: 5-12s)
+    const dur = (5 + Math.random() * 7).toFixed(2);
+    // Random delay so they are staggered
+    const delay = (Math.random() * 8).toFixed(2);
+
+    el.style.cssText = `
+      left: ${left}%;
+      bottom: ${startBottom}%;
+      font-size: ${size}px;
+      animation-duration: ${dur}s;
+      animation-delay: ${delay}s;
+      text-shadow: 0 0 6px rgba(245,208,96,0.7);
+    `;
+
+    wrapper.appendChild(el);
+  }
+}
