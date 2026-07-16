@@ -2290,10 +2290,12 @@ button:hover { opacity: 0.85; }
 /* Locked scroll state */
 body {
   overflow-y: hidden;
+  height: 100%;
 }
 
 body.card-opened {
-  overflow-y: auto;
+  overflow-y: visible;
+  height: auto;
 }
 
 /* Slide up reveal for main invitation card */
