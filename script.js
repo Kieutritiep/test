@@ -20,74 +20,12 @@ window.addEventListener('DOMContentLoaded', () => {
     if (envGuest) envGuest.innerText = name;
   }
 
-  // Khởi tạo hạt vàng bay lơ lửng trên màn cổng
-  initAmbientSparkles();
+  // Hiển thị ngay các phần tử trong màn hình đầu tiên (hero) khi trang load
+  const heroElements = document.querySelectorAll('.invite-container .reveal, .invite-container .reveal-left, .invite-container .reveal-bottom, .invite-container .reveal-right');
+  heroElements.forEach(el => el.classList.add('show'));
 
-  // Xử lý mở thiệp thư cưới
-  const envelope = document.getElementById('wedding-envelope-wrapper');
-  if (envelope) {
-    envelope.addEventListener('click', () => {
-      if (envelope.classList.contains('opening')) return;
-      envelope.classList.add('opening');
-      
-      // Tạo vụ nổ hạt lấp lánh màu vàng kim ở giữa màn hình (nơi dấu sáp vỡ ra)
-      const centerX = window.innerWidth / 2;
-      const centerY = window.innerHeight / 2;
-      for (let i = 0; i < 30; i++) {
-        const sparkle = document.createElement('div');
-        sparkle.innerText = Math.random() > 0.5 ? '✨' : '✦';
-        sparkle.style.cssText = `
-          position: fixed;
-          left: ${centerX}px;
-          top: ${centerY}px;
-          z-index: 999999;
-          font-size: ${12 + Math.random() * 14}px;
-          color: #ffd700;
-          text-shadow: 0 0 8px #ffb300;
-          pointer-events: none;
-          transform: translate(-50%, -50%);
-          transition: transform 1.2s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 1.2s ease-out;
-        `;
-        document.body.appendChild(sparkle);
-        
-        const angle = Math.random() * Math.PI * 2;
-        const dist = 60 + Math.random() * 140;
-        const tx = Math.cos(angle) * dist;
-        const ty = Math.sin(angle) * dist;
-        
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            sparkle.style.transform = `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(1.5) rotate(${Math.random() * 360}deg)`;
-            sparkle.style.opacity = '0';
-          });
-        });
-        
-        setTimeout(() => sparkle.remove(), 1300);
-      }
-      
-      // Tự động phát nhạc nếu có nút nhạc nền hoạt động
-      const musicBtn = document.getElementById('weddingMusicBtn');
-      if (musicBtn && !musicBtn.classList.contains('playing')) {
-        musicBtn.click();
-      }
-      
-      setTimeout(() => {
-        envelope.classList.add('opened');
-        document.body.classList.add('card-opened');
-        
-        // Hiển thị ngay các phần tử trong màn hình đầu tiên (hero) khi mở thiệp
-        const heroElements = document.querySelectorAll('.invite-container .reveal, .invite-container .reveal-left, .invite-container .reveal-bottom, .invite-container .reveal-right');
-        heroElements.forEach(el => el.classList.add('show'));
-        
-        // Buộc trình duyệt tính toán lại hiệu ứng cuộn reveal
-        window.dispatchEvent(new Event('scroll'));
-        
-        setTimeout(() => {
-          envelope.remove();
-        }, 1200);
-      }, 1300);
-    });
-  }
+  // Buộc trình duyệt tính toán lại hiệu ứng cuộn reveal
+  window.dispatchEvent(new Event('scroll'));
 });
 
 // ===================== SCROLL REVEAL =====================

@@ -2287,28 +2287,14 @@ button:hover { opacity: 0.85; }
   100% { transform: translateY(-85vh) rotate(360deg); opacity: 0; }
 }
 
-/* Locked scroll state */
+/* Scroll state */
 body {
-  overflow-y: hidden;
-  height: 100%;
-}
-
-body.card-opened {
   overflow-y: visible;
-  height: auto;
 }
 
-/* Slide up reveal for main invitation card */
+/* Main invitation card visibility */
 #card {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 1.2s cubic-bezier(0.25, 0.8, 0.25, 1), transform 1.2s cubic-bezier(0.25, 0.8, 0.25, 1);
-  pointer-events: none;
-}
-
-body.card-opened #card {
   opacity: 1;
-  transform: translateY(0);
   pointer-events: auto;
 }
 
