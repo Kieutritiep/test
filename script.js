@@ -75,6 +75,10 @@ window.addEventListener('DOMContentLoaded', () => {
         envelope.classList.add('opened');
         document.body.classList.add('card-opened');
         
+        // Hiển thị ngay các phần tử trong màn hình đầu tiên (hero) khi mở thiệp
+        const heroElements = document.querySelectorAll('.invite-container .reveal, .invite-container .reveal-left, .invite-container .reveal-bottom, .invite-container .reveal-right');
+        heroElements.forEach(el => el.classList.add('show'));
+        
         // Buộc trình duyệt tính toán lại hiệu ứng cuộn reveal
         window.dispatchEvent(new Event('scroll'));
         
@@ -103,8 +107,8 @@ function initScrollReveal() {
         }
       });
     }, {
-      threshold: 0.3,
-      rootMargin: "0px 0px -80px 0px"
+      threshold: 0.1,
+      rootMargin: "0px 0px -40px 0px"
     });
     elements.forEach(el => observer.observe(el));
   };
